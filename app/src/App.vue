@@ -10,7 +10,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">V-rok PMS</a>
+          <router-link :to="{ name: 'Dashboard' }" tag="a" class="navbar-brand">V-rok PMS</router-link>
         </div>
       </div><!-- /.container-fluid -->
     </nav>

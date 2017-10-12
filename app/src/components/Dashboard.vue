@@ -124,10 +124,10 @@ export default {
       createProject(this.add_project)
         .then((resp) => {
           this.getProjects()
-          if(resp.status = 'error'){
-            this.$toastr.error(`Project NOT Created - ${this.add_project.name}`)           
-          }else{
+          if(resp.status == 'success'){
             this.$toastr.success(`Project Created - ${this.add_project.name}`)             
+          }else{
+            this.$toastr.error(`Project NOT Created - ${this.add_project.name}`)            
           }
           this.showNewProjectModal = false         
         }).catch((err) => {
