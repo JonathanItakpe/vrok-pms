@@ -1,5 +1,29 @@
 <template>
   <div>
+    <div class="row" style="margin-bottom: 20px;">
+      <div class="col-xs-2">
+        <label>Name</label>
+        <input v-model="filter.name" type="text" class="form-control" placeholder="Name">
+      </div>
+      <div class="col-xs-2">
+        <label>Priority</label>
+        <select v-model="filter.priority" class="form-control" placeholder="Priority">
+          <option selected>None</option>
+          <option v-for="n in 5">{{ n }}</option>
+        </select>
+      </div>
+      <div class="col-xs-2">
+        <label>Due Date</label>
+        <!-- <input v-model="filter.due_date" type="date" class="form-control" placeholder="Due Date"> -->
+        <datepicker format="MM/dd/yyyy" v-model="filter.due_date" class="form-control"></datepicker>
+      </div>
+      <div class="col-xs-2">
+        <label>
+          <input type="checkbox" v-model="filter.overdue"> Overdue
+        </label>
+      </div>
+      <button class="btn btn-primary" @click="getTasks">Filter</button>
+    </div>
     <table class="table">
       <thead>
         <th>Name</th>
@@ -25,11 +49,21 @@
 
 <script>
   import { getTasks } from "../services/tasks";
+  import Datepicker from 'vuejs-datepicker';
 
   export default {
+    components: {
+      Datepicker
+    },
     data () {
       return {
-        tasks: []
+        tasks: [],
+        filter: {
+          name: '',
+          priority: '',
+          due_date: '',
+          overdue: ''
+        }
       }
     },
     mounted(){
@@ -37,7 +71,7 @@
     },
     methods: {
       getTasks() {
-        getTasks()
+        getTasks(this.filter)
           .then((resp) => {
             this.tasks = resp.data
             this.tasks.forEach(function(task) {

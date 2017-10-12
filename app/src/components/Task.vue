@@ -213,7 +213,11 @@ export default {
       createSubTask(this.add_sub_task)
         .then((resp) => {
           this.getSubTasks(this.$route.params.task_id)
-          this.$toastr.success(`SubTask Added - ${this.add_sub_task.name}`) 
+          if(resp.status == 'success'){
+            this.$toastr.success(`SubTask Added - ${this.add_sub_task.name}`)             
+          }else{
+            this.$toastr.error(`Unable to add SubTask - ${this.add_sub_task.name}`)                
+          }
           this.showNewSubTaskModal = false         
         }).catch((err) => {
           console.log(err)

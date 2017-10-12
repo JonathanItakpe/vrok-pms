@@ -48,13 +48,21 @@ class SubTaskController {
             if(!task) return ResponseService.json(404, "error", res, "Task you are trying to create a sub task for does exist")
 
             subtask_data.task = task._id
-            let subtask = new SubTask(subtask_data)
             
-            subtask.save((err) => {
-              if (err) return ResponseService.json(500, 'error', res, 'An error occurred.', null, err)
-              
-              return ResponseService.json(200, 'success', res, 'SubTask Created', subtask)              
-            })
+            // Check if the subtask with that same name exists in the task
+            SubTask.findOne({ name: subtask_data.name, task: subtask_data.task })
+              .exec((err, subtask) => {
+                if (err) return ResponseService.json(500, 'error', res, 'An error occurred.', null, err)
+                if (subtask) return ResponseService.json(500, 'error', res, `SubTask with same name - ${subtask_data.name} already exists in task`)
+                
+                let new_subtask = new SubTask(subtask_data)
+
+                new_subtask.save((err) => {
+                  if (err) return ResponseService.json(500, 'error', res, 'An error occurred.', null, err)
+                  
+                  return ResponseService.json(200, 'success', res, 'Sub Task Created', new_subtask)
+                })
+              })
           })
       })
   }

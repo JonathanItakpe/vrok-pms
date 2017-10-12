@@ -215,7 +215,12 @@ export default {
       createTask(this.add_task)
         .then((resp) => {
           this.getTasks(this.$route.params.project_id)
-          this.$toastr.success(`Task Added - ${this.add_task.name}`) 
+          console.log(resp)
+          if(resp.status == 'success'){
+            this.$toastr.success(`Task Added - ${this.add_task.name}`)             
+          }else{
+            this.$toastr.error(`Task NOT Added - ${this.add_task.name}`)                         
+          }
           this.showNewTaskModal = false         
         }).catch((err) => {
           console.log(err)

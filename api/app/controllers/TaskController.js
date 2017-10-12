@@ -7,7 +7,18 @@ const moment = require('moment')
 
 class TaskController {
   getTasks (req, res) {
-    Task.find({})
+    var query = {}
+
+    if(req.query.name) query.name = req.query.name
+    if(req.query.priority && req.query.priority !== 'null') query.priority = req.query.priority
+    if(req.query.due_date && req.query.due_date !== 'null') query.due_date = { '$gt' : new Date(req.query.due_date)}
+    
+    if(req.query.overdue && req.query.overdue == 'true'){
+      query.due_date = { '$lt' : new Date() }
+      query.is_completed = false
+    }
+
+    Task.find(query)
       .populate('project', 'name')
       .exec((err, tasks) => {
         if(err) return ResponseService.json(500, "error", res, 'An error occurred.', null, err)
@@ -55,7 +66,6 @@ class TaskController {
           return ResponseService.json(400, 'error', res, 'Data Failed to pass validation', result.array())
         }
 
-        //TODO: Fix the date Issues -- Timezone ISH
         var task_data = _.pick(req.body, ['name', 'description', 'due_date', 'priority']);
         task_data.due_date = new Date(task_data.due_date)
 
@@ -66,13 +76,20 @@ class TaskController {
             if(!project) return ResponseService.json(404, "error", res, "Project you are trying to create a task for does exist")
 
             task_data.project = project._id
-            let task = new Task(task_data)
-            
-            task.save((err) => {
-              if (err) return ResponseService.json(500, 'error', res, 'An error occurred.', null, err)
-              
-              return ResponseService.json(200, 'success', res, 'Task Created', task)
-            })
+
+            // Check if the task with that same name exists in the project
+            Task.findOne({ name: task_data.name, project: task_data.project })
+              .exec((err, task) => {
+                if (err) return ResponseService.json(500, 'error', res, 'An error occurred.', null, err)
+                if (task) return ResponseService.json(500, 'error', res, `Task with same name - ${task_data.name} already exists in project`)
+                
+                var new_task = new Task(task_data)
+                new_task.save((err) => {
+                  if (err) return ResponseService.json(500, 'error', res, 'An error occurred.', null, err)
+                  
+                  return ResponseService.json(200, 'success', res, 'Task Created', new_task)
+                })
+              })
           })
       })
   }
