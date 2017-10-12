@@ -1,0 +1,38 @@
+{
+  "name": "vrok",
+  "version": "1.0.0",
+  "description": "...Leave it to us.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JonathanItakpe/vrok.git"
+  },
+  "keywords": [
+    "pms",
+    "project management"
+  ],
+  "author": "Jonathan Itakpe <jonathanitakpe@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JonathanItakpe/vrok/issues"
+  },
+  "homepage": "https://github.com/JonathanItakpe/vrok#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "express": "^4.15.3",
+    "express-flash": "0.0.2",
+    "express-session": "^1.15.4",
+    "express-validator": "^4.2.1",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "mongoose": "^4.11.4",
+    "mongoose-delete": "^0.3.4",
+    "mongoose-unique-validator": "^1.0.6"
+  }
+}
