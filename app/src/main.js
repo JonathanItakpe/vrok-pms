@@ -15,7 +15,7 @@ Vue.prototype.$_ = lodash
 Vue.prototype.$moment = moment
 
 // Axios base url set up
-Vue.prototype.$axios.defaults.baseURL = 'http://127.0.0.1:3000'
+Vue.prototype.$axios.defaults.baseURL = process.env.API_URL
 
 Vue.config.productionTip = false
 
